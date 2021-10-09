@@ -4,14 +4,12 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Data fields of the Item.
      *
-     * @var mixed[]
      */
     public String[] $fields;
 
     /**
      * Flag to determine whether or not changes must be logged into history.
      *
-     * @var boolean
      */
     public boolean $dohistory = false;
 
@@ -19,14 +17,12 @@ public class CommonDBTM extends CommonGLPI {
      * List of fields that must not be taken into account when logging history or computating last
      * modification date.
      *
-     * @var string[]
      */
     public String[] $history_blacklist;
 
     /**
      * Flag to determine whether or not automatic messages must be generated on actions.
      *
-     * @var boolean
      */
     public boolean $auto_message_on_action = true;
 
@@ -34,7 +30,6 @@ public class CommonDBTM extends CommonGLPI {
      * Flag to determine whether or not a link to item form can be automatically generated via
      * self::getLink() method.
      *
-     * @var boolean
      */
     public boolean $no_form_page = false;
 
@@ -42,36 +37,32 @@ public class CommonDBTM extends CommonGLPI {
      * Flag to determine whether or not table name of item can be automatically generated via
      * self::getTable() method.
      *
-     * @var boolean
      */
     static protected boolean $notable = false;
 
     /**
      * List of fields that must not be taken into account for dictionnary processing.
      *
-     * @var string[]
      */
     public String[] $additional_fields_for_dictionnary;
 
     /**
      * List of linked item types on which entities informations should be forwarded on update.
      *
-     * @var string[]
      */
     static protected String[] $forward_entity_to;
 
     /**
      * Foreign key field cache : set dynamically calling getForeignKeyField
      *
-     * @TODO Remove this variable as it is not used ?
+     * //TODO Remove this variable as it is not used ?
      */
     protected String $fkfield = "";
 
     /**
      * Search option of item. Initialized on first call to self::getOptions() and used as cache.
      *
-     * @var array
-     * @TODO Should be removed and replaced by real cache usage.
+     * //TODO Should be removed and replaced by real cache usage.
      */
     protected boolean $searchopt = false;
 
@@ -88,14 +79,12 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * List of linked item types from plugins on which entities informations should be forwarded on update.
      *
-     * @var array
      */
     static protected String[] $plugins_forward_entity;
 
     /**
      * Flag to determine whether or not table name of item has a notepad.
      *
-     * @var boolean
      */
     protected boolean $usenotepad = false;
 
@@ -103,21 +92,18 @@ public class CommonDBTM extends CommonGLPI {
      * Flag to determine whether or not notification queu should be flushed immediately when an
      * action is performed on item.
      *
-     * @var boolean
      */
     public boolean $notificationqueueonaction = false;
 
     /**
      * Computed/forced values of classes tables.
      *
-     * @var string[]
      */
     protected static String[] $tables_of;
 
     /**
      * Computed values of classes foreign keys.
      *
-     * @var string[]
      */
     protected static String[] $foreign_key_fields_of;
 
@@ -125,7 +111,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Fields to remove when querying data with api
      *
-     * @var array
      */
     static String[] $undisclosedFields;
 
@@ -167,7 +152,6 @@ public class CommonDBTM extends CommonGLPI {
      * force table value (used for config management for old versions)
      *
      * @param $table name of the table to be forced
-     * @return void
      **/
     static void forceTable(String $table) {
         //self::$tables_of[get_called_class()] =$table;
@@ -252,7 +236,6 @@ public class CommonDBTM extends CommonGLPI {
      * Hydrate an object from a resultset row
      *
      * @param $rs The row
-     * @return void
      */
     void getFromResultSet(int[] $rs) {
         //just set fields!
@@ -359,7 +342,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done at the end of the getFromDB function
      *
-     * @return void
      **/
     void post_getFromDB() {
     }
@@ -369,7 +351,6 @@ public class CommonDBTM extends CommonGLPI {
      * Actions done to not show some fields when geting a single item from API calls
      *
      * @param $fields Fields to unset undiscloseds
-     * @return void
      */
     static public void unsetUndisclosedFields(String[] $fields) {
 //        foreach( static::$undisclosedFields as $key){
@@ -463,7 +444,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done at the end of the getEmpty function
      *
-     * @return void
      **/
     void post_getEmpty() {
     }
@@ -642,7 +622,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Clean data in the tables which have linked the deleted item
      *
-     * @return void
      **/
     void cleanHistory() {
 //        global $DB;
@@ -662,7 +641,6 @@ public class CommonDBTM extends CommonGLPI {
      * Clean data in the tables which have linked the deleted item
      * Clear 1/N Relation
      *
-     * @return void
      **/
     void cleanRelationData() {
 //        global $DB, $CFG_GLPI;
@@ -737,7 +715,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done after the DELETE of the item in the database
      *
-     * @return void
      **/
     void post_deleteFromDB() {
     }
@@ -746,7 +723,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done when item is deleted from the database
      *
-     * @return void
      **/
     void cleanDBonPurge() {
     }
@@ -757,7 +733,6 @@ public class CommonDBTM extends CommonGLPI {
      *
      * @param $relations_classes List of classname on which deletion will be done
      *                           Classes needs to extends CommonDBConnexity.
-     * @return void
      **/
     protected void deleteChildrenAndRelationsFromDb(String[] $relations_classes) {
 
@@ -782,7 +757,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Clean translations associated to a dropdown
      *
-     * @return void
      * @since 0.85
      **/
     void cleanTranslations() {
@@ -800,7 +774,6 @@ public class CommonDBTM extends CommonGLPI {
      * Clean the data in the relation tables for the deleted item
      * Clear N/N Relation
      *
-     * @return void
      **/
     void cleanRelationTable() {
 //        global $CFG_GLPI, $DB;
@@ -924,7 +897,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done when item flag deleted is set to an item
      *
-     * @return void
      **/
     void cleanDBonMarkDeleted() {
     }
@@ -933,7 +905,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Save the input data in the Session
      *
-     * @return void
      * @since 0.84
      **/
     protected void saveInput() {
@@ -944,7 +915,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Clear the saved data stored in the session
      *
-     * @return void
      * @since 0.84
      **/
     protected void clearSavedInput() {
@@ -977,7 +947,6 @@ public class CommonDBTM extends CommonGLPI {
      * Restore data saved in the session to $this->input
      *
      * @param $saved Array of values saved in session
-     * @return array Array of values
      * @since 9.5.5
      **/
     protected void restoreSavedValues(String[] $saved) {
@@ -1258,7 +1227,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Add a message on add action
      *
-     * @return void
      **/
     void addMessageOnAddAction() {
 
@@ -1334,7 +1302,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done after the ADD of the item in the database
      *
-     * @return void
      **/
     void post_addItem() {
     }
@@ -1344,7 +1311,6 @@ public class CommonDBTM extends CommonGLPI {
      *
      * @param $source  the item that is being cloned
      * @param $history do history log ?
-     * @return void
      * @since 9.5
      **/
     void post_clone(String $source, boolean $history) {
@@ -1525,7 +1491,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Forward entity information to linked items
      *
-     * @return void
      **/
     protected void forwardEntityInformations() {
 //        global $DB;
@@ -1576,7 +1541,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Add a message on update action
      *
-     * @return void
      **/
     void addMessageOnUpdateAction() {
 
@@ -1633,7 +1597,6 @@ public class CommonDBTM extends CommonGLPI {
      * Actions done after the UPDATE of the item in the database
      *
      * @param $history store changes history ? (default 1)
-     * @return void
      **/
     void post_updateItem(boolean $history) {
     }
@@ -1642,7 +1605,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done before the UPDATE of the item in the database
      *
-     * @return void
      **/
     void pre_updateInDB() {
     }
@@ -1757,7 +1719,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done after the DELETE (mark as deleted) of the item in the database
      *
-     * @return void
      **/
     void post_deleteItem() {
     }
@@ -1766,7 +1727,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done after the PURGE of the item in the database
      *
-     * @return void
      **/
     void post_purgeItem() {
     }
@@ -1775,7 +1735,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Add a message on delete action
      *
-     * @return void
      **/
     void addMessageOnDeleteAction() {
 
@@ -1813,7 +1772,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Add a message on purge action
      *
-     * @return void
      **/
     void addMessageOnPurgeAction() {
 
@@ -1922,7 +1880,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Actions done after the restore of the item
      *
-     * @return void
      **/
     void post_restoreItem() {
     }
@@ -1931,7 +1888,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Add a message on restore action
      *
-     * @return void
      **/
     void addMessageOnRestoreAction() {
 
@@ -1964,7 +1920,6 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Reset fields of the item
      *
-     * @return void
      **/
     void reset() {
 //        $this -> fields =[];
@@ -2330,7 +2285,6 @@ public class CommonDBTM extends CommonGLPI {
      *              - candel : set to false to hide "delete" button
      *              - canedit : set to false to hide all buttons
      *              - addbuttons : array of buttons to add
-     * @return void
      **/
     void showFormButtons(String[] $options) {
 
@@ -2546,7 +2500,6 @@ public class CommonDBTM extends CommonGLPI {
      *              - canedit boolean edit mode of form ?
      *              - formtitle specific form title
      *              - noid Set to true if ID should not be append (eg. already done in formtitle)
-     * @return void
      **/
     void showFormHeader(String[] $options) {
 
@@ -2853,7 +2806,6 @@ public class CommonDBTM extends CommonGLPI {
      * @param $ID    ID of the item (-1 if new item)
      * @param $right Right to check : r / w / recursive
      * @param $input array of input data (used for adding item) (default NULL)
-     * @return void
      **/
     void check(int $ID, String $right, String[] $input) {
 
@@ -2903,7 +2855,6 @@ public class CommonDBTM extends CommonGLPI {
      * Check global right on an object
      *
      * @param $right Right to check : c / r / w / d
-     * @return void
      **/
     void checkGlobal(String $right) {
 
@@ -3264,7 +3215,7 @@ public class CommonDBTM extends CommonGLPI {
      **/
     String getComments() {
 
-        String $comment = "";
+//        String $comment = "";
 //        $toadd = [];
 //        if ($this -> isField('completename')) {
 //            $toadd[] = ['name' =>__('Complete name'),
@@ -3360,7 +3311,7 @@ public class CommonDBTM extends CommonGLPI {
 //            return Html::showToolTip ($comment, ['display' =>false]);
 //        }
 
-        return $comment;
+        return "";
     }
 
 
@@ -3703,7 +3654,6 @@ public class CommonDBTM extends CommonGLPI {
      * @param $itemtype   the type of the item for which we want the actions
      * @param $is_deleted (default 0)
      * @param $checkitem  (default NULL)
-     * @return void (update is set inside $actions)
      * @since 0.85
      **/
     static void getMassiveActionsForItemtype(String[] $actions, String $itemtype, boolean $is_deleted, CommonDBTM $checkitem) {
@@ -3728,7 +3678,6 @@ public class CommonDBTM extends CommonGLPI {
      * @param $ma   the current massive action object
      * @param $item the item on which apply the massive action
      * @param $ids  an array of the ids of the item on which apply the action
-     * @return void (direct submit to $ma object)
      * @since 0.85
      **/
     static void processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item, int[] $ids) {
@@ -3909,7 +3858,6 @@ public class CommonDBTM extends CommonGLPI {
      * Check float and decimal values
      *
      * @param $display display or not messages in and addAfterRedirect (true by default)
-     * @return void
      **/
     void filterValues(boolean $display) {
         // MoYo : comment it because do not understand why filtering is disable
@@ -4806,7 +4754,6 @@ public class CommonDBTM extends CommonGLPI {
      * @param $itemtype Item type
      * @param $target   Target
      * @param $add      (default 0)
-     * @return false|void
      */
     static void listTemplates(String $itemtype, String $target,  boolean $add) {
 //        global $DB;
@@ -4935,7 +4882,6 @@ public class CommonDBTM extends CommonGLPI {
      *
      * @param $for_itemtype change of entity for this itemtype will be forwarder
      * @param $to_itemtype  change of entity will affect this itemtype
-     * @return void
      * @since 0.83
      **/
     static void addForwardEntity(String $for_itemtype, String $to_itemtype) {
@@ -5215,7 +5161,6 @@ public class CommonDBTM extends CommonGLPI {
      * Manage business rules for assets
      *
      * @param $condition the condition (RuleAsset::ONADD or RuleAsset::ONUPDATE)
-     * @return void
      * @since 9.4
      */
     private void assetBusinessRules(boolean $condition) {
@@ -5348,8 +5293,8 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Get cache key containing raw name for a given itemtype and id
      *
-     * @param $itemtype
-     * @param $id
+     * @param $itemtype desc
+     * @param $id desc
      * @since 9.5
      */
     public static String getCacheKeyForFriendlyName(String $itemtype, int $id) {
@@ -5361,7 +5306,7 @@ public class CommonDBTM extends CommonGLPI {
      * The purpose of this function is to try to access the friendly name
      * without having to read the object from the database
      *
-     * @param $id
+     * @param $id desc
      * @return string Friendly name of the object
      * @since 9.5
      */
@@ -5417,8 +5362,8 @@ public class CommonDBTM extends CommonGLPI {
     /**
      * Correct entity id if needed when cloning a template
      *
-     * @param $data
-     * @param $parent_id
+     * @param $data desc
+     * @param $parent_id desc
      * @return array
      */
     public static String[] checkTemplateEntity(String[] $data, int $parent_id, String $parent_itemtype) {
@@ -5449,7 +5394,7 @@ public class CommonDBTM extends CommonGLPI {
      * Friendly names may uses multiple fields (e.g user: first name + last name)
      * Return the computed criteria to use in a WHERE clause.
      *
-     * @param $filter
+     * @param $filter desc
      * @return array
      */
     public static String[] getFriendlyNameSearchCriteria(String $filter) {
@@ -5470,7 +5415,7 @@ public class CommonDBTM extends CommonGLPI {
      * Friendly names may uses multiple fields (e.g user: first name + last name)
      * Return the computed field name to use in a SELECT clause.
      *
-     * @param $alias
+     * @param $alias desc
      * @return mixed
      */
     public static String getFriendlyNameFields(String $alias) {

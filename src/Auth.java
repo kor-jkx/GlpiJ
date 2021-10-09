@@ -1,14 +1,17 @@
+import java.util.ArrayList;
+
 public class Auth extends CommonGLPI {
     static String $rightname = "config";
 
     /**
      * Array of errors
      */
-    private String $errors[];
+    private ArrayList<String> errors = new ArrayList<String>();
+    //private String[] $errors;
     /**
      * User User class variable
      */
-    public User $user;
+    public final User $user;
     /**
      * External authentication variable
      */
@@ -16,11 +19,11 @@ public class Auth extends CommonGLPI {
     /**
      * External authentication methods
      */
-    public String $authtypes[];
+    public String[] $authtypes;
     /**
      * Indicates if the user is authenticated or not
      */
-    public boolean $auth_succeded = false;
+    public final boolean $auth_succeded = false;
     /**
      * Indicates if the user is already present in database
      */
@@ -63,7 +66,6 @@ public class Auth extends CommonGLPI {
 
     /**
      * Constructor
-     *
      */
     public Auth() {
 
@@ -72,7 +74,7 @@ public class Auth extends CommonGLPI {
 
     static String[] getMenuContent() {
 
-        String[] $menu = new String[]{};
+//        String[] $menu = new String[]{};
 //        if (Config::canUpdate ()){
 //            $menu['title'] = __('Authentication');
 //            $menu['page'] = '/front/setup.auth.php';
@@ -97,7 +99,7 @@ public class Auth extends CommonGLPI {
 //        if (count($menu)) {
 //            return $menu;
 //        }
-        return $menu;
+        return new String[]{};
     }
 
     /**
@@ -105,7 +107,6 @@ public class Auth extends CommonGLPI {
      *
      * @param $options conditions : array('name'=>'glpi') or array('email' => 'test at test.com')
      * @return integer {@link Auth::USER_DOESNT_EXIST}, {@link Auth::USER_EXISTS_WITHOUT_PWD} or {@link Auth::USER_EXISTS_WITH_PWD}
-     * @global DBmysql $DB
      */
     int userExists(String[] $options) {
 //        global $DB;
@@ -271,7 +272,7 @@ public class Auth extends CommonGLPI {
      * @since 0.85
      */
     static boolean checkPassword(String $pass, String $hash) {
-        boolean $ok=true;
+//        boolean $ok = true;
 //        $tmp = password_get_info($hash);
 //
 //        if (isset($tmp['algo']) && $tmp['algo']) {
@@ -288,7 +289,7 @@ public class Auth extends CommonGLPI {
 //            $ok = ($salt.sha1($salt.$pass) == = $hash);
 //        }
 
-        return $ok;
+        return false;
     }
 
     /**
@@ -329,7 +330,6 @@ public class Auth extends CommonGLPI {
      * @param $name     User Login
      * @param $password User Password
      * @return boolean user in GLPI DB with the right password
-     * @global DBmysql $DB
      */
     boolean connection_db(String $name, String $password) {
 //        global $CFG_GLPI, $DB;
@@ -595,20 +595,17 @@ public class Auth extends CommonGLPI {
      * @return string current identification error
      */
     String getErr() {
-//        return implode("<br>\n", $this -> getErrors());
-        return "";
+        return errors.toString();
     }
 
     /**
      * Get errors
      *
-     * @return array
+     * @return ArrayList
      * @since 9.4
      */
-    public String[] getErrors() {
-
-//        return $this -> errors;
-        return new String[]{};
+    public ArrayList<String> getErrors() {
+        return errors;
     }
 
     /**
@@ -623,11 +620,9 @@ public class Auth extends CommonGLPI {
     /**
      * Get all the authentication methods parameters
      * and return it as an array
-     *
-     * @return void
      */
     void getAuthMethods() {
-
+        $authtypes = new String[]{"ldap", "mail"};
         //Return all the authentication methods in an array
 //        $this -> authtypes =['ldap' = > getAllDataFromTable('glpi_authldaps'),'mail' =>getAllDataFromTable('glpi_authmails')];
     }
@@ -635,23 +630,20 @@ public class Auth extends CommonGLPI {
     /**
      * Add a message to the global identification error message
      *
-     * @param $message the message to add
-     * @return void
+     * @param message the message to add
      */
-    void addToError(String $message) {
-//        if (!in_array($message, $this -> errors)) {
-//            $this -> errors[] =$message;
-//        }
+    void addToError(String message) {
+        if (!errors.contains(message)) errors.add(message);
     }
 
     /**
      * Manage use authentication and initialize the session
      *
-     * @param $login_name      Login
-     * @param $login_password  Password
-     * @param $noauto          (false by default)
-     * @param $remember_me
-     * @param $login_auth      Type of auth - id of the auth
+     * @param $login_name     Login
+     * @param $login_password Password
+     * @param $noauto         (false by default)
+     * @param $remember_me    desc
+     * @param $login_auth     Type of auth - id of the auth
      * @return boolean (success)
      */
     boolean login(String $login_name, String $login_password, boolean $noauto, boolean $remember_me, String $login_auth) {
@@ -960,21 +952,16 @@ public class Auth extends CommonGLPI {
      * Print all the authentication methods
      *
      * @param $options Possible options:
-     *              - name : Name of the select (default is auths_id)
-     *              - value : Selected value (default 0)
-     *              - display : If true, the dropdown is displayed instead of returned (default true)
-     *              - display_emptychoice : If true, an empty option is added (default true)
+     *                 - name : Name of the select (default is auths_id)
+     *                 - value : Selected value (default 0)
+     *                 - display : If true, the dropdown is displayed instead of returned (default true)
+     *                 - display_emptychoice : If true, an empty option is added (default true)
      * @return void|string (Based on 'display' option)
      */
     static String dropdown(String[] $options) {
 //        global $DB;
 //
-//        $p = [
-//        'name' =>'auths_id',
-//                'value' =>0,
-//                'display' =>true,
-//                'display_emptychoice' =>true,
-//      ];
+//        $p = ['name' =>'auths_id','value' =>0,'display' =>true,'display_emptychoice' =>true,];
 //
 //        if (is_array($options) && count($options)) {
 //            foreach($options as $key = > $val){
@@ -1192,7 +1179,7 @@ public class Auth extends CommonGLPI {
      * Check alternate authentication systems
      *
      * @param $redirect        need to redirect (true) or get type of Auth system which match
-     *                (false by default)
+     *                         (false by default)
      * @param $redirect_string redirect string if exists (default '')
      * @return void|integer nothing if redirect is true, else Auth system ID
      */
@@ -1307,306 +1294,305 @@ public class Auth extends CommonGLPI {
     /**
      * Display refresh button in the user page
      *
-     * @param User $user User object
-     * @return void
+     * @param $user User object
      */
-    static function showSynchronizationForm(User $user) {
-        global $DB, $CFG_GLPI;
-
-        if (Session::haveRight ("user", User::UPDATEAUTHENT)){
-            echo "<form method='post' action='".Toolbox::getItemTypeFormURL ('User'). "'>";
-            echo "<div class='firstbloc'>";
-
-            switch ($user -> getField('authtype')) {
-                case self::CAS:
-                case self::EXTERNAL:
-                case self::X509:
-                case self::LDAP:
-                    //Look it the auth server still exists !
-                    // <- Bad idea : id not exists unable to change anything
-                    // SQL query
-                    $result = $DB -> request([
-                            'SELECT' = > 'name',
-                            'FROM' =>'glpi_authldaps',
-                        'WHERE' => ['id' =>$user -> getField('auths_id'), 'is_active' =>1],
-               ]);
-
-                    if ($result -> numrows() > 0) {
-                        echo "<table class='tab_cadre'><tr class='tab_bg_2'><td>";
-                        echo "<input type='hidden' name='id' value='".$user->getID(). "'>";
-                        echo "<input class=submit type='submit' name='force_ldap_resynch' value='".
-                                __s('Force synchronization'). "'>";
-                        echo "</td></tr></table>";
-                    }
-                    break;
-
-                case self::DB_GLPI:
-                case self::MAIL:
-                    break;
-            }
-            echo "</div>";
-
-            echo "<div class='spaced'>";
-            echo "<table class='tab_cadre'>";
-            echo "<tr><th>".__('Change of the authentication method'). "</th></tr>";
-            echo "<tr class='tab_bg_2'><td class='center'>";
-            $rand = self::dropdown (['name' = > 'authtype']);
-            $paramsmassaction = ['authtype' =>'__VALUE__',
-                    'name' =>'change_auth_method'];
-            Ajax::updateItemOnSelectEvent ("dropdown_authtype$rand", "show_massiveaction_field",
-                    $CFG_GLPI["root_doc"]. "/ajax/dropdownMassiveActionAuthMethods.php",
-                    $paramsmassaction);
-            echo "<input type='hidden' name='id' value='".$user->getID(). "'>";
-            echo "<span id='show_massiveaction_field'></span>";
-            echo "</td></tr></table>";
-            echo "</div>";
-            Html::closeForm ();
-        }
+    static void showSynchronizationForm(User $user) {
+//        global $DB, $CFG_GLPI;
+//
+//        if (Session::haveRight ("user", User::UPDATEAUTHENT)){
+//            echo "<form method='post' action='".Toolbox::getItemTypeFormURL ('User'). "'>";
+//            echo "<div class='firstbloc'>";
+//
+//            switch ($user -> getField('authtype')) {
+//                case self::CAS:
+//                case self::EXTERNAL:
+//                case self::X509:
+//                case self::LDAP:
+//                    //Look it the auth server still exists !
+//                    // <- Bad idea : id not exists unable to change anything
+//                    // SQL query
+//                    $result = $DB -> request([
+//                            'SELECT' = > 'name',
+//                            'FROM' =>'glpi_authldaps',
+//                        'WHERE' => ['id' =>$user -> getField('auths_id'), 'is_active' =>1],
+//               ]);
+//
+//                    if ($result -> numrows() > 0) {
+//                        echo "<table class='tab_cadre'><tr class='tab_bg_2'><td>";
+//                        echo "<input type='hidden' name='id' value='".$user->getID(). "'>";
+//                        echo "<input class=submit type='submit' name='force_ldap_resynch' value='".
+//                                __s('Force synchronization'). "'>";
+//                        echo "</td></tr></table>";
+//                    }
+//                    break;
+//
+//                case self::DB_GLPI:
+//                case self::MAIL:
+//                    break;
+//            }
+//            echo "</div>";
+//
+//            echo "<div class='spaced'>";
+//            echo "<table class='tab_cadre'>";
+//            echo "<tr><th>".__('Change of the authentication method'). "</th></tr>";
+//            echo "<tr class='tab_bg_2'><td class='center'>";
+//            $rand = self::dropdown (['name' = > 'authtype']);
+//            $paramsmassaction = ['authtype' =>'__VALUE__',
+//                    'name' =>'change_auth_method'];
+//            Ajax::updateItemOnSelectEvent ("dropdown_authtype$rand", "show_massiveaction_field",
+//                    $CFG_GLPI["root_doc"]. "/ajax/dropdownMassiveActionAuthMethods.php",
+//                    $paramsmassaction);
+//            echo "<input type='hidden' name='id' value='".$user->getID(). "'>";
+//            echo "<span id='show_massiveaction_field'></span>";
+//            echo "</td></tr></table>";
+//            echo "</div>";
+//            Html::closeForm ();
+//        }
     }
 
     /**
      * Check if a login is valid
      *
-     * @param string $login login to check
+     * @param $login login to check
      * @return boolean
      */
-    static function isValidLogin($login) {
-        return preg_match("/^[[:alnum:]'@.\-_ ]+$/iu", $login);
+    static boolean isValidLogin(String $login) {
+
+//        return preg_match("/^[[:alnum:]'@.\-_ ]+$/iu", $login);
+        return false;
     }
 
-    function getTabNameForItem(CommonGLPI $item, $withtemplate =0) {
+    String getTabNameForItem(CommonGLPI $item, int $withtemplate) {
 
-        if (!$withtemplate) {
-            switch ($item -> getType()) {
-                case 'User':
-                    if (Session::haveRight ("user", User::UPDATEAUTHENT)){
-                    return __('Synchronization');
-                }
-                break;
-            }
-        }
-        return '';
+//        if (!$withtemplate) {
+//            switch ($item -> getType()) {
+//                case 'User':
+//                    if (Session::haveRight ("user", User::UPDATEAUTHENT)){
+//                    return __('Synchronization');
+//                }
+//                break;
+//            }
+//        }
+        return "";
     }
 
     /**
      * Show Tab content
      *
-     * @param CommonGLPI $item         Item instance
-     * @param integer    $tabnum       Unused (default 0)
-     * @param integer    $withtemplate Unused (default 0)
+     * @param $item         Item instance
+     * @param $tabnum       Unused (default 0)
+     * @param $withtemplate Unused (default 0)
      * @return boolean
      * @since 0.83
      */
-    static function displayTabContentForItem(CommonGLPI $item, $tabnum =1, $withtemplate =0) {
+    static boolean displayTabContentForItem(CommonGLPI $item, int $tabnum, int $withtemplate) {
 
-        if ($item -> getType() == 'User') {
-            self::showSynchronizationForm ($item);
-        }
+//        if ($item -> getType() == 'User') {
+//            self::showSynchronizationForm ($item);
+//        }
         return true;
     }
 
     /**
      * Show form for authentication configuration.
-     *
-     * @return void|boolean False if the form is not shown due to right error. Form is directly printed.
      */
-    static function showOtherAuthList() {
-        global $CFG_GLPI;
-
-        if (!Config::canUpdate ()){
-            return false;
-        }
-        echo "<form name=cas action='".$CFG_GLPI['root_doc']. "/front/auth.others.php' method='post'>";
-        echo "<div class='center'>";
-        echo "<table class='tab_cadre_fixe'>";
-
-        // CAS config
-        echo "<tr><th>".__('CAS authentication'). '</th><th>';
-        if (!empty($CFG_GLPI["cas_host"])) {
-            echo _x ('authentication', 'Enabled');
-        }
-        echo "</th></tr>\n";
-
-        if (function_exists('curl_init')
-                && Toolbox::canUseCAS ()){
-
-            //TRANS: for CAS SSO system
-            echo "<tr class='tab_bg_2'><td class='center'>".__('CAS Host'). "</td>";
-            echo "<td><input type='text' name='cas_host' value=\"".$CFG_GLPI["cas_host"]. "\"></td></tr>\n";
-            //TRANS: for CAS SSO system
-            echo "<tr class='tab_bg_2'><td class='center'>".__('CAS Version'). "</td>";
-            echo "<td>";
-            Auth::dropdownCasVersion ($CFG_GLPI["cas_version"]);
-            echo "</td>";
-            echo "</tr>\n";
-            //TRANS: for CAS SSO system
-            echo "<tr class='tab_bg_2'><td class='center'>"._n('Port', 'Ports', 1). "</td>";
-            echo "<td><input type='text' name='cas_port' value=\"".$CFG_GLPI["cas_port"]. "\"></td></tr>\n";
-            //TRANS: for CAS SSO system
-            echo "<tr class='tab_bg_2'><td class='center'>".__('Root directory (optional)'). "</td>";
-            echo "<td><input type='text' name='cas_uri' value=\"".$CFG_GLPI["cas_uri"]. "\"></td></tr>\n";
-            //TRANS: for CAS SSO system
-            echo "<tr class='tab_bg_2'><td class='center'>".__('Log out fallback URL'). "</td>";
-            echo "<td><input type='text' name='cas_logout' value=\"".$CFG_GLPI["cas_logout"]. "\"></td>".
-            "</tr>\n";
-        } else{
-            echo "<tr class='tab_bg_2'><td class='center' colspan='2'>";
-            if (!function_exists('curl_init')) {
-                echo "<p class='red'>".__("The CURL extension for your PHP parser isn't installed");
-                echo "</p>";
-            }
-            if (!Toolbox::canUseCAS ()){
-                echo
-                "<p class='red'>".__("The CAS lib isn't available, GLPI doesn't package it anymore for license compatibility issue.");
-                echo "</p>";
-            }
-            echo "<p>".__('Impossible to use CAS as external source of connection'). "</p>";
-            echo "<p><strong>".GLPINetwork::getSupportPromoteMessage (). "</strong></p>";
-
-            echo "</td></tr>\n";
-        }
-        // X509 config
-        echo "<tr><th>".__('x509 certificate authentication'). "</th><th>";
-        if (!empty($CFG_GLPI["x509_email_field"])) {
-            echo _x ('authentication', 'Enabled');
-        }
-        echo "</th></tr>\n";
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Email attribute for x509 authentication'). "</td>";
-        echo "<td><input type='text' name='x509_email_field' value=\"".$CFG_GLPI["x509_email_field"]. "\">";
-        echo "</td></tr>\n";
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".sprintf(__('Restrict %s field for x509 authentication (separator $)'), 'OU').
-        "</td>";
-        echo "<td><input type='text' name='x509_ou_restrict' value=\"".$CFG_GLPI["x509_ou_restrict"]. "\">";
-        echo "</td></tr>\n";
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".sprintf(__('Restrict %s field for x509 authentication (separator $)'), 'CN').
-        "</td>";
-        echo "<td><input type='text' name='x509_cn_restrict' value=\"".$CFG_GLPI["x509_cn_restrict"]. "\">";
-        echo "</td></tr>\n";
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".sprintf(__('Restrict %s field for x509 authentication (separator $)'), 'O'). "</td>";
-        echo "<td><input type='text' name='x509_o_restrict' value=\"".$CFG_GLPI["x509_o_restrict"]. "\">";
-        echo "</td></tr>\n";
-
-        //Other configuration
-        echo "<tr><th>".__('Other authentication sent in the HTTP request'). "</th><th>";
-        if (!empty($CFG_GLPI["ssovariables_id"])) {
-            echo _x ('authentication', 'Enabled');
-        }
-        echo "</th></tr>\n";
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".SsoVariable::getTypeName (1). "</td>";
-        echo "<td>";
-        SsoVariable::dropdown (['name' = > 'ssovariables_id',
-                'value' =>$CFG_GLPI["ssovariables_id"]]);
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('SSO logout url'). "</td>";
-        echo "<td><input type='text' name='ssologout_url' value='".
-                $CFG_GLPI['ssologout_url']. "'></td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Remove the domain of logins like login@domain'). "</td><td>";
-        Dropdown::showYesNo ('existing_auth_server_field_clean_domain',
-                $CFG_GLPI['existing_auth_server_field_clean_domain']);
-        echo "</td></tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Surname'). "</td>";
-        echo "<td><input type='text' name='realname_ssofield' value='".
-                $CFG_GLPI['realname_ssofield']. "'></td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('First name'). "</td>";
-        echo "<td><input type='text' name='firstname_ssofield' value='".
-                $CFG_GLPI['firstname_ssofield']. "'></td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Comments'). "</td>";
-        echo "<td><input type='text' name='comment_ssofield' value='".
-                $CFG_GLPI['comment_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Administrative number'). "</td>";
-        echo "<td><input type='text' name='registration_number_ssofield' value='".
-                $CFG_GLPI['registration_number_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>"._n('Email', 'Emails', 1). "</td>";
-        echo "<td><input type='text' name='email1_ssofield' value='".$CFG_GLPI['email1_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".sprintf(__('%1$s %2$s'), _n('Email', 'Emails', 1), '2'). "</td>";
-        echo "<td><input type='text' name='email2_ssofield' value='".$CFG_GLPI['email2_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".sprintf(__('%1$s %2$s'), _n('Email', 'Emails', 1), '3'). "</td>";
-        echo "<td><input type='text' name='email3_ssofield' value='".$CFG_GLPI['email3_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".sprintf(__('%1$s %2$s'), _n('Email', 'Emails', 1), '4'). "</td>";
-        echo "<td><input type='text' name='email4_ssofield' value='".$CFG_GLPI['email4_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".Phone::getTypeName (1). "</td>";
-        echo "<td><input type='text' name='phone_ssofield' value='".$CFG_GLPI['phone_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Phone 2'). "</td>";
-        echo "<td><input type='text' name='phone2_ssofield' value='".$CFG_GLPI['phone2_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Mobile phone'). "</td>";
-        echo "<td><input type='text' name='mobile_ssofield' value='".$CFG_GLPI['mobile_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>"._x('person', 'Title'). "</td>";
-        echo "<td><input type='text' name='title_ssofield' value='".$CFG_GLPI['title_ssofield']. "'>";
-        echo "</td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Category'). "</td>";
-        echo "<td><input type='text' name='category_ssofield' value='".
-                $CFG_GLPI['category_ssofield']. "'></td>";
-        echo "</tr>\n";
-
-        echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>".__('Language'). "</td>";
-        echo "<td><input type='text' name='language_ssofield' value='".
-                $CFG_GLPI['language_ssofield']. "'></td></tr>";
-
-        echo "<tr class='tab_bg_1'><td class='center' colspan='2'>";
-        echo "<input type='submit' name='update' class='submit' value=\"".__s('Save'). "\" >";
-        echo "</td></tr>\n";
-
-        echo "</table></div>\n";
-        Html::closeForm ();
+    static void showOtherAuthList() {
+//        global $CFG_GLPI;
+//
+//        if (!Config::canUpdate ()){
+//            return false;
+//        }
+//        echo "<form name=cas action='".$CFG_GLPI['root_doc']. "/front/auth.others.php' method='post'>";
+//        echo "<div class='center'>";
+//        echo "<table class='tab_cadre_fixe'>";
+//
+//        // CAS config
+//        echo "<tr><th>".__('CAS authentication'). '</th><th>';
+//        if (!empty($CFG_GLPI["cas_host"])) {
+//            echo _x ('authentication', 'Enabled');
+//        }
+//        echo "</th></tr>\n";
+//
+//        if (function_exists('curl_init')
+//                && Toolbox::canUseCAS ()){
+//
+//            //TRANS: for CAS SSO system
+//            echo "<tr class='tab_bg_2'><td class='center'>".__('CAS Host'). "</td>";
+//            echo "<td><input type='text' name='cas_host' value=\"".$CFG_GLPI["cas_host"]. "\"></td></tr>\n";
+//            //TRANS: for CAS SSO system
+//            echo "<tr class='tab_bg_2'><td class='center'>".__('CAS Version'). "</td>";
+//            echo "<td>";
+//            Auth::dropdownCasVersion ($CFG_GLPI["cas_version"]);
+//            echo "</td>";
+//            echo "</tr>\n";
+//            //TRANS: for CAS SSO system
+//            echo "<tr class='tab_bg_2'><td class='center'>"._n('Port', 'Ports', 1). "</td>";
+//            echo "<td><input type='text' name='cas_port' value=\"".$CFG_GLPI["cas_port"]. "\"></td></tr>\n";
+//            //TRANS: for CAS SSO system
+//            echo "<tr class='tab_bg_2'><td class='center'>".__('Root directory (optional)'). "</td>";
+//            echo "<td><input type='text' name='cas_uri' value=\"".$CFG_GLPI["cas_uri"]. "\"></td></tr>\n";
+//            //TRANS: for CAS SSO system
+//            echo "<tr class='tab_bg_2'><td class='center'>".__('Log out fallback URL'). "</td>";
+//            echo "<td><input type='text' name='cas_logout' value=\"".$CFG_GLPI["cas_logout"]. "\"></td>".
+//            "</tr>\n";
+//        } else{
+//            echo "<tr class='tab_bg_2'><td class='center' colspan='2'>";
+//            if (!function_exists('curl_init')) {
+//                echo "<p class='red'>".__("The CURL extension for your PHP parser isn't installed");
+//                echo "</p>";
+//            }
+//            if (!Toolbox::canUseCAS ()){
+//                echo
+//                "<p class='red'>".__("The CAS lib isn't available, GLPI doesn't package it anymore for license compatibility issue.");
+//                echo "</p>";
+//            }
+//            echo "<p>".__('Impossible to use CAS as external source of connection'). "</p>";
+//            echo "<p><strong>".GLPINetwork::getSupportPromoteMessage (). "</strong></p>";
+//
+//            echo "</td></tr>\n";
+//        }
+//        // X509 config
+//        echo "<tr><th>".__('x509 certificate authentication'). "</th><th>";
+//        if (!empty($CFG_GLPI["x509_email_field"])) {
+//            echo _x ('authentication', 'Enabled');
+//        }
+//        echo "</th></tr>\n";
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Email attribute for x509 authentication'). "</td>";
+//        echo "<td><input type='text' name='x509_email_field' value=\"".$CFG_GLPI["x509_email_field"]. "\">";
+//        echo "</td></tr>\n";
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".sprintf(__('Restrict %s field for x509 authentication (separator $)'), 'OU').
+//        "</td>";
+//        echo "<td><input type='text' name='x509_ou_restrict' value=\"".$CFG_GLPI["x509_ou_restrict"]. "\">";
+//        echo "</td></tr>\n";
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".sprintf(__('Restrict %s field for x509 authentication (separator $)'), 'CN').
+//        "</td>";
+//        echo "<td><input type='text' name='x509_cn_restrict' value=\"".$CFG_GLPI["x509_cn_restrict"]. "\">";
+//        echo "</td></tr>\n";
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".sprintf(__('Restrict %s field for x509 authentication (separator $)'), 'O'). "</td>";
+//        echo "<td><input type='text' name='x509_o_restrict' value=\"".$CFG_GLPI["x509_o_restrict"]. "\">";
+//        echo "</td></tr>\n";
+//
+//        //Other configuration
+//        echo "<tr><th>".__('Other authentication sent in the HTTP request'). "</th><th>";
+//        if (!empty($CFG_GLPI["ssovariables_id"])) {
+//            echo _x ('authentication', 'Enabled');
+//        }
+//        echo "</th></tr>\n";
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".SsoVariable::getTypeName (1). "</td>";
+//        echo "<td>";
+//        SsoVariable::dropdown (['name' = > 'ssovariables_id',
+//                'value' =>$CFG_GLPI["ssovariables_id"]]);
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('SSO logout url'). "</td>";
+//        echo "<td><input type='text' name='ssologout_url' value='".
+//                $CFG_GLPI['ssologout_url']. "'></td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Remove the domain of logins like login@domain'). "</td><td>";
+//        Dropdown::showYesNo ('existing_auth_server_field_clean_domain',
+//                $CFG_GLPI['existing_auth_server_field_clean_domain']);
+//        echo "</td></tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Surname'). "</td>";
+//        echo "<td><input type='text' name='realname_ssofield' value='".
+//                $CFG_GLPI['realname_ssofield']. "'></td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('First name'). "</td>";
+//        echo "<td><input type='text' name='firstname_ssofield' value='".
+//                $CFG_GLPI['firstname_ssofield']. "'></td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Comments'). "</td>";
+//        echo "<td><input type='text' name='comment_ssofield' value='".
+//                $CFG_GLPI['comment_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Administrative number'). "</td>";
+//        echo "<td><input type='text' name='registration_number_ssofield' value='".
+//                $CFG_GLPI['registration_number_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>"._n('Email', 'Emails', 1). "</td>";
+//        echo "<td><input type='text' name='email1_ssofield' value='".$CFG_GLPI['email1_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".sprintf(__('%1$s %2$s'), _n('Email', 'Emails', 1), '2'). "</td>";
+//        echo "<td><input type='text' name='email2_ssofield' value='".$CFG_GLPI['email2_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".sprintf(__('%1$s %2$s'), _n('Email', 'Emails', 1), '3'). "</td>";
+//        echo "<td><input type='text' name='email3_ssofield' value='".$CFG_GLPI['email3_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".sprintf(__('%1$s %2$s'), _n('Email', 'Emails', 1), '4'). "</td>";
+//        echo "<td><input type='text' name='email4_ssofield' value='".$CFG_GLPI['email4_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".Phone::getTypeName (1). "</td>";
+//        echo "<td><input type='text' name='phone_ssofield' value='".$CFG_GLPI['phone_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Phone 2'). "</td>";
+//        echo "<td><input type='text' name='phone2_ssofield' value='".$CFG_GLPI['phone2_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Mobile phone'). "</td>";
+//        echo "<td><input type='text' name='mobile_ssofield' value='".$CFG_GLPI['mobile_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>"._x('person', 'Title'). "</td>";
+//        echo "<td><input type='text' name='title_ssofield' value='".$CFG_GLPI['title_ssofield']. "'>";
+//        echo "</td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Category'). "</td>";
+//        echo "<td><input type='text' name='category_ssofield' value='".
+//                $CFG_GLPI['category_ssofield']. "'></td>";
+//        echo "</tr>\n";
+//
+//        echo "<tr class='tab_bg_2'>";
+//        echo "<td class='center'>".__('Language'). "</td>";
+//        echo "<td><input type='text' name='language_ssofield' value='".
+//                $CFG_GLPI['language_ssofield']. "'></td></tr>";
+//
+//        echo "<tr class='tab_bg_1'><td class='center' colspan='2'>";
+//        echo "<input type='submit' name='update' class='submit' value=\"".__s('Save'). "\" >";
+//        echo "</td></tr>\n";
+//
+//        echo "</table></div>\n";
+//        Html::closeForm ();
     }
 
     /**
@@ -1614,103 +1600,100 @@ public class Auth extends CommonGLPI {
      *
      * @return array
      */
-    static function getLoginAuthMethods() {
-        global $DB;
-
-        $elements = [
-        '_default' =>'local',
-                'local' =>__("GLPI internal database")
-      ];
-
-        // Get LDAP
-        if (Toolbox::canUseLdap ()){
-            $iterator = $DB -> request([
-                    'FROM' = > 'glpi_authldaps',
-                    'WHERE' => [
-            'is_active' =>1
-            ],
-            'ORDER' => ['name']
-         ]);
-            while ($data = $iterator -> next()) {
-                $elements['ldap-'.$data['id']] = $data['name'];
-                if ($data['is_default'] == 1) {
-                    $elements['_default'] = 'ldap-'.$data['id'];
-                }
-            }
-        }
-
-        // GET Mail servers
-        $iterator = $DB -> request([
-                'FROM' = > 'glpi_authmails',
-                'WHERE' => [
-        'is_active' =>1
-         ],
-        'ORDER' => ['name']
-      ]);
-        while ($data = $iterator -> next()) {
-            $elements['mail-'.$data['id']] = $data['name'];
-        }
-
-        return $elements;
+    static String[] getLoginAuthMethods() {
+//        global $DB;
+//
+//        $elements = [
+//        '_default' =>'local',
+//                'local' =>__("GLPI internal database")
+//      ];
+//
+//        // Get LDAP
+//        if (Toolbox::canUseLdap ()){
+//            $iterator = $DB -> request([
+//                    'FROM' = > 'glpi_authldaps',
+//                    'WHERE' => [
+//            'is_active' =>1
+//            ],
+//            'ORDER' => ['name']
+//         ]);
+//            while ($data = $iterator -> next()) {
+//                $elements['ldap-'.$data['id']] = $data['name'];
+//                if ($data['is_default'] == 1) {
+//                    $elements['_default'] = 'ldap-'.$data['id'];
+//                }
+//            }
+//        }
+//
+//        // GET Mail servers
+//        $iterator = $DB -> request([
+//                'FROM' = > 'glpi_authmails',
+//                'WHERE' => [
+//        'is_active' =>1
+//         ],
+//        'ORDER' => ['name']
+//      ]);
+//        while ($data = $iterator -> next()) {
+//            $elements['mail-'.$data['id']] = $data['name'];
+//        }
+//
+//        return $elements;
+        return new String[]{};
     }
 
     /**
      * Display the authentication source dropdown for login form
      */
-    static function dropdownLogin() {
-        $elements = self::getLoginAuthMethods ();
-        $default = $elements['_default'];
-        unset($elements['_default']);
-        // show dropdown of login src only when multiple src
-        if (count($elements) > 1) {
-            echo '<p class="login_input" id="login_input_src">';
-            Dropdown::showFromArray ('auth', $elements, [
-            'rand' =>'1',
-                    'value' =>$default,
-                    'width' =>'100%'
-         ]);
-            echo '</p>';
-        } else if (count($elements) == 1) {
-            // when one src, don't display it, pass it with hidden input
-            echo Html::hidden('auth',[
-                    'value' = > key($elements)
-         ]);
-        }
+    static void dropdownLogin() {
+//        $elements = self::getLoginAuthMethods ();
+//        $default = $elements['_default'];
+//        unset($elements['_default']);
+//        // show dropdown of login src only when multiple src
+//        if (count($elements) > 1) {
+//            echo '<p class="login_input" id="login_input_src">';
+//            Dropdown::showFromArray ('auth', $elements, [
+//            'rand' =>'1',
+//                    'value' =>$default,
+//                    'width' =>'100%'
+//         ]);
+//            echo '</p>';
+//        } else if (count($elements) == 1) {
+//            // when one src, don't display it, pass it with hidden input
+//            echo Html::hidden('auth',[
+//                    'value' = > key($elements)
+//         ]);
+//        }
     }
 
 
-    static function getIcon() {
+    static String getIcon() {
         return "fas fa-sign-in-alt";
     }
 
     /**
      * Defines "rememberme" cookie.
      *
-     * @param string $cookie_value
-     * @return void
+     * @param $cookie_value desc
      */
-    public static function setRememberMeCookie(string $cookie_value):
-
-    void {
-        global $CFG_GLPI;
-
-        $cookie_name = session_name(). '_rememberme';
-        $cookie_lifetime = empty($cookie_value) ? time() - 3600 : time() + $CFG_GLPI['login_remember_time'];
-        $cookie_path = ini_get('session.cookie_path');
-        $cookie_domain = ini_get('session.cookie_domain');
-        $cookie_secure = (bool) ini_get('session.cookie_secure');
-
-        if (empty($cookie_value) && !isset($_COOKIE[$cookie_name])) {
-            return;
-        }
-
-        setcookie($cookie_name, $cookie_value, $cookie_lifetime, $cookie_path, $cookie_domain, $cookie_secure, true);
-
-        if (empty($cookie_value)) {
-            unset($_COOKIE[$cookie_name]);
-        } else {
-            $_COOKIE[$cookie_name] = $cookie_value;
-        }
+    public static void setRememberMeCookie(String $cookie_value) {
+//        global $CFG_GLPI;
+//
+//        $cookie_name = session_name(). '_rememberme';
+//        $cookie_lifetime = empty($cookie_value) ? time() - 3600 : time() + $CFG_GLPI['login_remember_time'];
+//        $cookie_path = ini_get('session.cookie_path');
+//        $cookie_domain = ini_get('session.cookie_domain');
+//        $cookie_secure = (bool) ini_get('session.cookie_secure');
+//
+//        if (empty($cookie_value) && !isset($_COOKIE[$cookie_name])) {
+//            return;
+//        }
+//
+//        setcookie($cookie_name, $cookie_value, $cookie_lifetime, $cookie_path, $cookie_domain, $cookie_secure, true);
+//
+//        if (empty($cookie_value)) {
+//            unset($_COOKIE[$cookie_name]);
+//        } else {
+//            $_COOKIE[$cookie_name] = $cookie_value;
+//        }
     }
-}
 }

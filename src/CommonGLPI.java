@@ -32,7 +32,7 @@ public class CommonGLPI {
      * @value boolean
      */
     public boolean get_item_to_display_tab = false;
-    static protected String othertabs[] = {};
+    static protected String[] othertabs = new String[]{};
 
 
     /**
@@ -65,8 +65,9 @@ public class CommonGLPI {
      *
      * @return string
      **/
-    static void getType() {
+    static String getType() {
         //return get_called_class();
+        return "";
     }
 
     private enum ObjectRight {
@@ -88,23 +89,13 @@ public class CommonGLPI {
      * @return boolean
      **/
     boolean can(int $ID, ObjectRight $right, String[] $input) {
-        switch ($right) {
-            case READ:
-                return canView();
-
-            case UPDATE:
-                return canUpdate();
-
-            case DELETE:
-                return canDelete();
-
-            case PURGE:
-                return canPurge();
-
-            case CREATE:
-                return canCreate();
-        }
-        return false;
+        return switch ($right) {
+            case READ -> canView();
+            case UPDATE -> canUpdate();
+            case DELETE -> canDelete();
+            case PURGE -> canPurge();
+            case CREATE -> canCreate();
+        };
     }
 
 
@@ -190,7 +181,6 @@ public class CommonGLPI {
      *
      * @param $typeform object class name to add tab on form
      * @param $typetab  object class name which manage the tab
-     * @return void
      * @since 0.83
      **/
     static void registerStandardTab(String $typeform, String $typetab) {
@@ -230,10 +220,10 @@ public class CommonGLPI {
      * @return String[] array containing the tabs
      **/
     String[] defineTabs(String[] $options) {
-        String[] $ong = new String[]{};
+//        String[] $ong = new String[]{};
 //        $this -> addDefaultFormTab($ong);
 //        $this -> addImpactTab($ong, $options);
-        return $ong;
+        return new String[]{};
     }
 
 
@@ -248,7 +238,7 @@ public class CommonGLPI {
     final String[] defineAllTabs(String[] $options) {
 //        global $CFG_GLPI;
 
-        String[] $onglets = new String[]{};
+//        String[] $onglets = new String[]{};
         // Tabs known by the object
 //        if ($this -> isNewItem()) {
 //            $this -> addDefaultFormTab($onglets);
@@ -274,7 +264,7 @@ public class CommonGLPI {
 //
 //            $onglets[-2] = __('Debug');
 //        }
-        return $onglets;
+        return new String[]{};
     }
 
 
@@ -612,7 +602,6 @@ public class CommonGLPI {
      * Redirect to the list page from which the item was selected
      * Default to the search engine for the type
      *
-     * @return void
      **/
     void redirectToList() {
 //        global $CFG_GLPI;
@@ -698,11 +687,11 @@ public class CommonGLPI {
      * @since 0.90
      **/
     static String getFormURLWithID(int $id, boolean $full) {
-        String $link ="";
+//        String $link ="";
 //        $itemtype = get_called_class();
 //        $link = $itemtype::getFormURL ($full);
 //        $link. = (strpos($link, '?') ? '&' : '?'). 'id='.$id;
-        return $link;
+        return "";
     }
 
 
@@ -746,7 +735,6 @@ public class CommonGLPI {
      *
      * @param $options parameters to add to URLs and ajax
      *                 - withtemplate is a template view ?
-     * @return void
      * @since 0.85
      **/
     void showTabsContent(String[] $options) {
@@ -831,7 +819,6 @@ public class CommonGLPI {
      *
      * @param $options parameters to add to URLs and ajax
      *                 - withtemplate is a template view ?
-     * @return void
      **/
     void showNavigationHeader(String[] $options) {
 //        global $CFG_GLPI;
@@ -1129,7 +1116,6 @@ public class CommonGLPI {
      * Display item with tabs
      *
      * @param $options Options
-     * @return void
      * @since 0.85
      **/
     void display(String[] $options) {
@@ -1175,7 +1161,6 @@ public class CommonGLPI {
     /**
      * List infos in debug tab
      *
-     * @return void
      **/
     void showDebugInfo() {
 //        global $CFG_GLPI;
@@ -1207,7 +1192,6 @@ public class CommonGLPI {
      *
      * @param $input        data to update
      * @param $sub_itemtype sub itemtype if needed (default '')
-     * @return void
      * @since 0.84
      **/
     static void updateDisplayOptions(String[] $input, String $sub_itemtype) {
@@ -1258,7 +1242,7 @@ public class CommonGLPI {
      * @since 0.84
      **/
     static String[] getDisplayOptions(String $sub_itemtype) {
-        String[] $display_options = new String[]{};
+//        String[] $display_options = new String[]{};
 
 //        if (!isset($_SESSION['glpi_display_options'])) {
 //            // Load display_options from user table
@@ -1294,7 +1278,7 @@ public class CommonGLPI {
 //                }
 //            }
 //        }
-        return $display_options;
+        return new String[]{};
     }
 
 
@@ -1302,7 +1286,6 @@ public class CommonGLPI {
      * Show display options
      *
      * @param $sub_itemtype sub_itemtype if needed (default '')
-     * @return void
      * @since 0.84
      **/
     static void showDislayOptions(String $sub_itemtype) {
@@ -1371,7 +1354,7 @@ public class CommonGLPI {
      * @since 0.84
      **/
     static String getDisplayOptionsLink(String $sub_itemtype) {
-        String $link = "";
+//        String $link = "";
 //        global $CFG_GLPI;
 //
 //        $rand = mt_rand();
@@ -1389,7 +1372,7 @@ public class CommonGLPI {
 //                'height' =>500,
 //                'reloadonclose' =>true]);
 
-        return $link;
+        return "";
     }
 
 

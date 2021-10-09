@@ -20,7 +20,6 @@ class Session {
     /**
      * Destroy the current session
      *
-     * @return void
      **/
     static void destroy() {
 
@@ -37,7 +36,6 @@ class Session {
      * Init session for the user is defined
      *
      * @param $auth Auth object to init session
-     * @return void
      **/
     static void init(Auth $auth) {
 //        global $CFG_GLPI;
@@ -146,7 +144,6 @@ class Session {
     /**
      * Set the directory where are store the session file
      *
-     * @return void
      **/
     static void setPath() {
 //        if (ini_get("session.save_handler") == "files" && session_status() != = PHP_SESSION_ACTIVE) {
@@ -157,7 +154,6 @@ class Session {
     /**
      * Start the GLPI php session
      *
-     * @return void
      **/
     static void start() {
 //
@@ -379,7 +375,6 @@ class Session {
      * Change active profile to the $ID one. Update glpiactiveprofile session variable.
      *
      * @param $ID ID of the new profile
-     * @return void
      **/
     static void changeProfile(int $ID) {
 
@@ -427,7 +422,6 @@ class Session {
      * Set the entities session variable. Load all entities from DB
      *
      * @param $userID ID of the user
-     * @return void
      **/
     static void initEntityProfiles(int $userID) {
 //        global $DB;
@@ -507,7 +501,6 @@ class Session {
     /**
      * Load current user's group on active entity
      *
-     * @return void
      **/
     static void loadGroups() {
 //        global $DB;
@@ -726,7 +719,6 @@ class Session {
     /**
      * Redirect User to login if not logged in
      *
-     * @return void
      * @since 0.85
      **/
     static void redirectIfNotLoggedIn() {
@@ -756,7 +748,6 @@ class Session {
     /**
      * Check if I have access to the central interface
      *
-     * @return void
      **/
     static void checkCentralAccess() {
 //        self::checkValidSessionId ();
@@ -771,7 +762,6 @@ class Session {
     /**
      * Check if I have the right to access to the FAQ (profile or anonymous FAQ)
      *
-     * @return void
      **/
     static void checkFaqAccess() {
 //        global $CFG_GLPI;
@@ -788,7 +778,6 @@ class Session {
     /**
      * Check if I have access to the helpdesk interface
      *
-     * @return void
      **/
     static void checkHelpdeskAccess() {
 //        self::checkValidSessionId ();
@@ -802,7 +791,6 @@ class Session {
     /**
      * Check if I am logged in
      *
-     * @return void
      **/
     static void checkLoginUser() {
 //        self::checkValidSessionId ();
@@ -819,7 +807,6 @@ class Session {
      *
      * @param $module Module to check
      * @param $right  Right to check
-     * @return void
      **/
     static void checkRight(String $module, int $right) {
 //        self::checkValidSessionId ();
@@ -835,7 +822,6 @@ class Session {
      *
      * @param $module Module to check
      * @param $rights Rights to check
-     * @return void
      **/
     static void checkRightsOr(String $module, String[] $rights) {
 //        self::checkValidSessionId ();
@@ -852,7 +838,6 @@ class Session {
      * You can't use this function if several rights for same module name
      *
      * @param $modules Array of modules where keys are modules and value are right
-     * @return void
      **/
     static void checkSeveralRightsOr(String[] $modules) {
 //        self::checkValidSessionId ();
@@ -1057,7 +1042,6 @@ class Session {
      * @param $check_once   Check if the message is not already added (false by default)
      * @param $message_type Message type (INFO, WARNING, ERROR) (default INFO)
      * @param $reset        Clear previous added message (false by default)
-     * @return void
      **/
     static void addMessageAfterRedirect(String $msg, boolean $check_once, int $message_type, boolean $reset) {
 
@@ -1095,7 +1079,6 @@ class Session {
      *
      * @param $itemtype item type
      * @param $tab      ID of the tab
-     * @return void
      **/
     static void setActiveTab(String $itemtype, int $tab) {
 //        $_SESSION['glpi_tabs'][strtolower($itemtype)] = $tab;
@@ -1153,7 +1136,7 @@ class Session {
      * @since 0.83.3
      **/
     static public String getNewCSRFToken(boolean $standalone) {
-        String $token = "";
+//        String $token = "";
 //        global $CURRENTCSRFTOKEN;
 //
 //        $token = $standalone ? '' : $CURRENTCSRFTOKEN;
@@ -1173,14 +1156,13 @@ class Session {
 //            $CURRENTCSRFTOKEN = $token;
 //        }
 
-        return $token;
+        return "";
     }
 
 
     /**
      * Clean expired CSRF tokens
      *
-     * @return void
      * @since 0.83.3
      **/
     static public void cleanCSRFTokens() {
@@ -1236,7 +1218,6 @@ class Session {
      * Check CSRF data
      *
      * @param $data $_POST data
-     * @return void
      * @since 0.84.2
      **/
     static public void checkCSRF(String[] $data) {
@@ -1260,13 +1241,13 @@ class Session {
      * So, we avoid IDOR request where an attacker asks for an another itemtype
      * than the originaly indtended
      *
-     * @param $itemtype
+     * @param $itemtype desc
      * @param $add_params more criteria to check validy of idor tokens
      * @return string
      * @since 9.5.3
      **/
     static public String getNewIDORToken(String $itemtype, String[] $add_params){
-        String $token = "";
+//        String $token = "";
 //        do {
 //            $token = bin2hex(random_bytes(32));
 //        } while ($token == '');
@@ -1280,7 +1261,7 @@ class Session {
 //      ]+($itemtype != = "" ?['itemtype' = > $itemtype] : [])
 //        +$add_params;
 
-        return $token;
+        return "";
     }
 
 
@@ -1337,7 +1318,6 @@ class Session {
     /**
      * Clean expired IDOR tokens
      *
-     * @return void
      * @since 9.5.3
      **/
     static public void cleanIDORTokens() {
@@ -1383,7 +1363,7 @@ class Session {
     /**
      * Check if current user can impersonate another user having given id.
      *
-     * @param $user_id
+     * @param $user_id desc
      * @return boolean
      */
     static boolean canImpersonate(int $user_id) {
@@ -1402,7 +1382,7 @@ class Session {
     /**
      * Impersonate user having given id.
      *
-     * @param $user_id
+     * @param $user_id desc
      * @return boolean
      */
     static boolean startImpersonating(int $user_id) {
@@ -1538,7 +1518,7 @@ class Session {
      * @return User|bool
      */
     public static User authWithToken(String $token, String $token_type, int $entities_id, boolean $is_recursive) {
-        User $user = new User();
+//        User $user = new User();
 
 //        // Try to load from token
 //        if (!$user -> getFromDBByToken($token, $token_type)) {
@@ -1554,7 +1534,7 @@ class Session {
 //            self::loadEntity ($entities_id, $is_recursive);
 //        }
 
-        return $user;
+        return new User();
     }
 
     /**
@@ -1562,7 +1542,6 @@ class Session {
      *
      * @param $entities_id  Entity to use
      * @param $is_recursive Whether to load entities recursivly or not
-     * @return void
      */
     public static void loadEntity(int $entities_id, boolean $is_recursive) {
 //        $_SESSION["glpiactive_entity"] = $entities_id;
